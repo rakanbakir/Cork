@@ -101,3 +101,5 @@ iOSInjectionProject/
 ### Projects ###
 *.xcodeproj
 *.xcworkspace
+
+*.app
