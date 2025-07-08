@@ -186,10 +186,67 @@ In my case, it was `echo "eval \"\$(/Users/david/.local/bin/mise activate zsh)\"
 11. Click `Copy App`
 12. Open the resulting folder. You'll see an app called Cork. Drag Cork to your `/Applications/` folder, and you're done!
 
-## License
+### Alternative: Command Line Compilation
 
-Cork is licensed under [Commons Clause](https://commonsclause.com).
+If you prefer a faster, command-line approach without using Xcode's GUI, you can build Cork directly from the terminal:
 
-This means that Cork's source source is available and you can modify it, contribute to it etc., but you can't sell or distribute Cork or modified versions of it.
+#### Option 1: With Tuist and Mise (Recommended)
 
-Moreover, you can’t distribute compiled versions of Cork without consulting me first. Compiling versions for your personal use is fine.
+**Prerequisites:**
+- Complete the setup steps above (Apple Developer account, Tuist, Mise installation)
+- Have the Cork project already cloned and generated
+
+**Steps:**
+1. **Clone and setup the project:**
+   ```bash
+   git clone https://github.com/buresdv/Cork.git && cd Cork
+   ```
+
+2. **Install dependencies and generate project:**
+   ```bash
+   mise exec tuist@4.25.0 -- tuist install
+   mise exec tuist@4.25.0 -- tuist generate --no-binary-cache
+   ```
+
+3. **Build the Self-Compiled scheme:**
+   ```bash
+   xcodebuild -workspace Cork.xcworkspace -scheme "Self-Compiled" -configuration Release -archivePath ./Cork.xcarchive archive
+   ```
+
+4. **Extract the built app:**
+   ```bash
+   cp -R ./Cork.xcarchive/Products/Applications/Cork.app ./Cork-Self-Compiled.app
+   ```
+
+#### Option 2: Quick Build (No Tuist/Mise Required)
+
+**Prerequisites:**
+- macOS Ventura or newer
+- Xcode 16 or newer  
+- Git
+
+**Steps:**
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/buresdv/Cork.git && cd Cork
+   ```
+
+2. **Build directly using the existing workspace:**
+   ```bash
+   xcodebuild -workspace Cork.xcworkspace -scheme "Self-Compiled" -configuration Release -archivePath ./Cork.xcarchive archive
+   ```
+
+3. **Extract the built app:**
+   ```bash
+   cp -R ./Cork.xcarchive/Products/Applications/Cork.app ./Cork-Self-Compiled.app
+   ```
+
+4. **Move to Applications folder (optional):**
+   ```bash
+   sudo mv ./Cork-Self-Compiled.app /Applications/
+   ```
+
+> [!TIP]
+> Both command-line methods are significantly faster than using Xcode's GUI and produce the same universal binary (Intel + Apple Silicon) with full functionality and no licensing restrictions. Option 2 is quicker to set up if you don't need Tuist for other projects.
+
+
